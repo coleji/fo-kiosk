@@ -1,0 +1,13 @@
+
+<resources>
+    <string name="app_name">Front Office Kiosk</string>
+    <string name="title_activity_landing">LandingActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+
+
+    <string name="not_lock_whitelisted">This app has not been given Device Owner
+        privileges to manage this device and start lock task mode</string>
+    <string name="not_device_owner">This app is not set as device owner
+        and cannot start lock task mode</string>
+</resources>
