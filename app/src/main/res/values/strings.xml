@@ -1,7 +1,7 @@
 
 <resources>
     <string name="app_name">Front Office Kiosk</string>
-    <string name="title_activity_landing">LandingActivity</string>
+    <string name="title_activity_landing">Front Office Kiosk</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
 
