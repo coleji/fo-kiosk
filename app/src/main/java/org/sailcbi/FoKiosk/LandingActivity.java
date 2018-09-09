@@ -50,5 +50,8 @@ public class LandingActivity extends Activity {
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
         );
+
+        // Uncomment to print a ticket
+        // PrintDriver.print(this);
     }
 }
