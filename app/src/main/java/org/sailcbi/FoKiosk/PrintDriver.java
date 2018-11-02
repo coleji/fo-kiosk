@@ -37,14 +37,15 @@ public class PrintDriver {
     }
 
     private static byte[] getCommands(Emulation emulation) {
-        byte[] data = "Hello I am the CBI Kiosk printer.  Let's print some tickets!!".getBytes();
+        byte[] data = "1234567".getBytes();
 
         ICommandBuilder builder = StarIoExt.createCommandBuilder(emulation);
 
         builder.beginDocument();
 
-        builder.append(data);
-        builder.append((byte) 0x0a);
+        builder.appendBarcode(data, ICommandBuilder.BarcodeSymbology.NW7, ICommandBuilder.BarcodeWidth.Mode1, 40, true);
+        builder.appendUnitFeed(32);
+
 
         builder.appendCutPaper(ICommandBuilder.CutPaperAction.PartialCutWithFeed);
 
