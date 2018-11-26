@@ -1,6 +1,9 @@
 package org.sailcbi.FoKiosk;
 
 import android.app.Activity;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import com.starmicronics.starioextension.ICommandBuilder;
 import com.starmicronics.starioextension.StarIoExt;
@@ -8,6 +11,11 @@ import com.starmicronics.starprntsdk.Communication;
 import com.starmicronics.starprntsdk.ModelCapability;
 import com.starmicronics.starprntsdk.PrinterSettingManager;
 import com.starmicronics.starprntsdk.PrinterSettings;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import static com.starmicronics.starioextension.StarIoExt.Emulation;
 
 public class PrintDriver {
@@ -30,20 +38,37 @@ public class PrintDriver {
         Emulation emulation = ModelCapability.getEmulation(settings.getModelIndex());
         int paperSize = settings.getPaperSize();
 
-        data = getCommands(emulation);
+        data = getCommands(context, emulation, "Charlie Zechel", "1234567");
 
         Communication.sendCommands(context, data, settings.getPortName(), settings.getPortSettings(), 10000, context, mCallback);     // 10000mS!!!
         System.out.println("Done printing");
     }
 
-    private static byte[] getCommands(Emulation emulation) {
-        byte[] data = "1234567".getBytes();
-
+    private static byte[] getCommands(Context context, Emulation emulation, String name, String cardNum) {
         ICommandBuilder builder = StarIoExt.createCommandBuilder(emulation);
 
-        builder.beginDocument();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        Date date = new Date();
+        String dateString = dateFormat.format(date);
 
-        builder.appendBarcode(data, ICommandBuilder.BarcodeSymbology.NW7, ICommandBuilder.BarcodeWidth.Mode1, 40, true);
+        Bitmap logoImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.cbi_logo_horiz);
+
+        builder.beginDocument();
+        builder.append(("Community Boating Guest Ticket\n\n\n").getBytes());
+        builder.appendBitmapWithAlignment(logoImage, true, 380, true, ICommandBuilder.AlignmentPosition.Center);
+        builder.append(("\n").getBytes());
+        //TODO: figure out why it's not respecting the alignment.  The demo app doesn't work either (although I swear it used to)
+        builder.appendBarcodeWithAlignment(
+                cardNum.getBytes(),
+                ICommandBuilder.BarcodeSymbology.NW7,
+                ICommandBuilder.BarcodeWidth.Mode1,
+                40,
+                true,
+                ICommandBuilder.AlignmentPosition.Center
+        );
+        builder.append(("\n\nGuest: " + name + "\n\n").getBytes());
+        builder.append(("Take this ticket\nto the Dockhouse\nto complete your rental!\n\n\n").getBytes());
+        builder.append(("Printed: " + dateString + "\n\n").getBytes());
         builder.appendUnitFeed(32);
 
 

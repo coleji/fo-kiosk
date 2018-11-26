@@ -52,6 +52,6 @@ public class LandingActivity extends Activity {
         );
 
         // Uncomment to print a ticket
-        // PrintDriver.print(this);
+        PrintDriver.print(this);
     }
 }
